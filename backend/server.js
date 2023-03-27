@@ -2,6 +2,7 @@ import express from 'express';
 import { getAccountInsights, getCampaignInsights } from './api.js';
 import config from './config.js';
 import mongoose from 'mongoose';
+import path from 'path';
 import Contact from './models/contactModel.js';
 
 mongoose
@@ -201,6 +202,12 @@ app.get('/api/assignments-by-campaign/:id', async (req, res) => {
 
   res.send(assignmentsByCampaign);
 });
+
+const __dirname = path.resolve();
+app.use(express.static(path.join(__dirname, '/frontend/build')));
+app.get('*', (req, res) =>
+  res.sendFile(path.join(__dirname, '/frontend/build/index.html'))
+);
 
 app.listen(config.PORT, () => {
   console.log('Server running at http://localhost:5000');
